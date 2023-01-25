@@ -3,6 +3,9 @@ import RecipeApiCache.RecipeApiCache.exceptions.NoSuchRecipeException;
 import RecipeApiCache.RecipeApiCache.models.Recipe;
 import RecipeApiCache.RecipeApiCache.repositories.RecipeRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -12,11 +15,13 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
+@CacheConfig(cacheNames = "recipes") //cacheNames = "recipes"
 public class RecipeService {
     @Autowired
     RecipeRepo recipeRepo;
 
     @Transactional
+    @CachePut(value = "recipes", key = "#recipe.id")
     public Recipe createNewRecipe(Recipe recipe) throws IllegalStateException {
         CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         recipe.setUser(userDetails);
@@ -26,6 +31,7 @@ public class RecipeService {
         return recipe;
     }
 
+    @Cacheable(value = "recipes", key = "#recipeId", sync = true)
     public Recipe getRecipeById(Long id) throws NoSuchRecipeException {
         Optional<Recipe> recipeOptional = recipeRepo.findById(id);
 
@@ -52,7 +58,7 @@ public class RecipeService {
         return matchingRecipes;
     }
 
-    @Cacheable("books")
+    @Cacheable("recipes")
     public ArrayList<Recipe> getAllRecipes() throws NoSuchRecipeException {
         ArrayList<Recipe> recipes = new ArrayList<>(recipeRepo.findAll());
 
@@ -64,6 +70,7 @@ public class RecipeService {
     }
 
     @Transactional
+    @CacheEvict(value = "employees", allEntries = true)
     public Recipe deleteRecipeById(Long id) throws NoSuchRecipeException {
         Recipe recipe = getRecipeById(id);
         recipeRepo.deleteById(id);
@@ -71,6 +78,7 @@ public class RecipeService {
     }
 
     @Transactional
+    @CacheEvict(value = "employees", allEntries = true)
     public Recipe updateRecipe(Recipe recipe, boolean forceIdCheck) throws NoSuchRecipeException {
         try {
             if (forceIdCheck) {

@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import javax.persistence.*;
 
 @Entity
@@ -11,7 +12,9 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Step {
+public class Step implements Serializable {
+    private static final long serialVersionUID = 6527855645691638321L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

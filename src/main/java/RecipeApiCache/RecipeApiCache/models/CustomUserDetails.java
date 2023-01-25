@@ -6,6 +6,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.io.Serializable;
+
 
 @Entity
 @Getter
@@ -13,7 +15,9 @@ import java.util.Collection;
 //@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomUserDetails implements UserDetails {
+public class CustomUserDetails implements Serializable, UserDetails {
+
+    private static final long serialVersionUID = 6527855645691638321L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

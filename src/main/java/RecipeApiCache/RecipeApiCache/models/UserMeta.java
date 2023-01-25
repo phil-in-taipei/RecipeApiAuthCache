@@ -3,6 +3,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.io.Serializable;
 
 import javax.persistence.*;
 
@@ -12,7 +13,10 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserMeta {
+
+public class UserMeta implements Serializable {
+
+    private static final long serialVersionUID = 6527855645691638321L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

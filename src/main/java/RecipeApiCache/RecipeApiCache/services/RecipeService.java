@@ -3,6 +3,7 @@ import RecipeApiCache.RecipeApiCache.exceptions.NoSuchRecipeException;
 import RecipeApiCache.RecipeApiCache.models.Recipe;
 import RecipeApiCache.RecipeApiCache.repositories.RecipeRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import RecipeApiCache.RecipeApiCache.models.CustomUserDetails;
@@ -51,6 +52,7 @@ public class RecipeService {
         return matchingRecipes;
     }
 
+    @Cacheable("books")
     public ArrayList<Recipe> getAllRecipes() throws NoSuchRecipeException {
         ArrayList<Recipe> recipes = new ArrayList<>(recipeRepo.findAll());
 

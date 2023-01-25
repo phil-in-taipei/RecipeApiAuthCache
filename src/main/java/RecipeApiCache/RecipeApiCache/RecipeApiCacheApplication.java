@@ -1,11 +1,11 @@
 package RecipeApiCache.RecipeApiCache;
-
 import RecipeApiCache.RecipeApiCache.models.*;
 
 import RecipeApiCache.RecipeApiCache.repositories.RecipeRepo;
 import RecipeApiCache.RecipeApiCache.repositories.ReviewRepo;
 import RecipeApiCache.RecipeApiCache.repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.Set;
 
 @SpringBootApplication
+@EnableCaching
 public class RecipeApiCacheApplication implements CommandLineRunner {
 
 

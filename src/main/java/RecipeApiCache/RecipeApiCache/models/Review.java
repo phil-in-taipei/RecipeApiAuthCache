@@ -1,10 +1,12 @@
 package RecipeApiCache.RecipeApiCache.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.persistence.*;
 import java.io.Serializable;
-
+import java.net.URI;
+import java.net.URISyntaxException;
 
 
 @Entity
@@ -41,11 +43,27 @@ public class Review implements Serializable {
     @JsonIgnore
     private Recipe recipe;
 
+    @Transient
+    @JsonIgnore
+    private URI locationURI;
+
     public void setRating(int rating) {
         if(rating <= 0 || rating > 10) {
             throw new IllegalStateException("Rating must be between 0 and 10");
         }
         this.rating = rating;
+    }
+
+    public void generateLocationURI() {
+        try {
+            locationURI = new URI(
+                    ServletUriComponentsBuilder.fromCurrentContextPath()
+                            .path("/reviews/")
+                            .path(String.valueOf(id))
+                            .toUriString());
+        }catch (URISyntaxException e) {
+            //Exception should stop here.
+        }
     }
 
     public String getAuthor() {

@@ -2,6 +2,7 @@ package RecipeApiCache.RecipeApiCache.services;
 import RecipeApiCache.RecipeApiCache.exceptions.NoSuchRecipeException;
 import RecipeApiCache.RecipeApiCache.models.Recipe;
 import RecipeApiCache.RecipeApiCache.repositories.RecipeRepo;
+//import RecipeApiCache.RecipeApiCache.repositories.RecipeRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -59,7 +60,7 @@ public class RecipeService {
     }
 
     //@Transactional
-    @Cacheable("recipes")
+    //@Cacheable("recipes")
     public ArrayList<Recipe> getAllRecipes() throws NoSuchRecipeException {
         ArrayList<Recipe> recipes = new ArrayList<>(recipeRepo.findAll());
 

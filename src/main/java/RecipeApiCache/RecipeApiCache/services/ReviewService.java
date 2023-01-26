@@ -4,10 +4,14 @@ import RecipeApiCache.RecipeApiCache.exceptions.NoSuchRecipeException;
 
 import RecipeApiCache.RecipeApiCache.repositories.ReviewRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import RecipeApiCache.RecipeApiCache.models.CustomUserDetails;
 import RecipeApiCache.RecipeApiCache.models.Recipe;
 import RecipeApiCache.RecipeApiCache.models.Review;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +25,7 @@ public class ReviewService {
     @Autowired
     RecipeService recipeService;
 
+    @Cacheable("reviews")
     public List<Review> getAllReviews() throws NoSuchReviewException {
         List<Review> reviews = reviewRepo.findAll();
 
@@ -31,6 +36,9 @@ public class ReviewService {
         return reviews;
     }
 
+
+    //@Cacheable(value = "reviews", key = "#id", sync = true)
+    @CachePut(value = "reviews", key = "#id")
     public Review getReviewById(Long id) throws NoSuchReviewException {
         Optional<Review> review = reviewRepo.findById(id);
 
@@ -63,6 +71,8 @@ public class ReviewService {
         return reviews;
     }
 
+    // won't work because it returns recipe and not review
+    //@CachePut(value = "review", key = "#reviewId") // recipeId
     public Recipe postNewReview(Review review, Long recipeId) throws NoSuchRecipeException {
         Recipe recipe = recipeService.getRecipeById(recipeId);
         recipe.getReviews().add(review);
@@ -70,6 +80,7 @@ public class ReviewService {
         return recipe;
     }
 
+    @CacheEvict(value = "reviews", allEntries = true)
     public Review deleteReviewById(Long id) throws NoSuchReviewException {
         Review review = getReviewById(id);
 
@@ -81,6 +92,7 @@ public class ReviewService {
         return review;
     }
 
+    @CachePut(value = "reviews", key = "#reviewToUpdate.id")
     public Review updateReviewById(Review reviewToUpdate) throws NoSuchReviewException {
         try {
             Review review = getReviewById(reviewToUpdate.getId());

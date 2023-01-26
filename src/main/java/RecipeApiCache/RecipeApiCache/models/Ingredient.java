@@ -15,7 +15,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Ingredient implements Serializable {
-    private static final long serialVersionUID = 6527855645691638321L;
+    private static final long serialVersionUID = -1442491845123729784L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

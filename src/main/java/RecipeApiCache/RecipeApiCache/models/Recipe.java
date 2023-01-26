@@ -17,7 +17,7 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 public class Recipe implements Serializable {
-    private static final long serialVersionUID = 6527855645691638321L;
+    private static final long serialVersionUID = 312398117297069187L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
